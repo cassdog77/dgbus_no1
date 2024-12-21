@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신철화 출근버스</title>
+    <title>버스 정보</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,8 +40,8 @@
                 <th>정류장 이름</th>
                 <th>버스 번호</th>
                 <th>도착</th>
-                <th>현재</th>
-                <th>정류장</th>
+                <th>현재 정류소</th>
+                <th>다음 정류소까지</th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +60,28 @@
     <p>{{ message }}</p>
     {% endif %}
     
-    <p><a href="https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/7011009200?_=1734780396256" target="_blank">북구3 버스 위치 보기</a></p>
+    <h2>북구3 버스 위치</h2>
+    {% if bus_locations %}
+    <table>
+        <thead>
+            <tr>
+                <th>차량 번호</th>
+                <th>정류소</th>
+                <th>위치 정보</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for location in bus_locations %}
+            <tr>
+                <td>{{ location['vehicleNo'] }}</td>
+                <td>{{ location['stationName'] }}</td> <!-- 정류소 이름 표시 -->
+                <td>위도: {{ location['ngisXPos'] }}, 경도: {{ location['ngisYPos'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>북구3 버스 위치 정보를 가져올 수 없습니다.</p>
+    {% endif %}
 </body>
 </html>
