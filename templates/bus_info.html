@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버스 정보</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media (max-width: 600px) {
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>버스 정보</h1>
+    {% if buses %}
+    <table>
+        <thead>
+            <tr>
+                <th>정류장 이름</th>
+                <th>버스 번호</th>
+                <th>도착</th>
+                <th>현재</th>
+                <th>정류장</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bus in buses %}
+            <tr>
+                <td>{{ bus['stopName'] }}</td>
+                <td>{{ bus['routeNo'] }}</td>
+                <td>{{ bus['arrState'] }}</td>
+                <td>{{ bus['bsNm'] }}</td>
+                <td>{{ bus['bsGap'] }}개</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>{{ message }}</p>
+    {% endif %}
+</body>
+</html>
