@@ -126,8 +126,8 @@ def get_bus_location():
         print(f"API 응답 오류: {response.status_code}")
         return []
 
-@app.route('/bus_info', methods=['GET'])
-def bus_info():
+@app.route('/morning', methods=['GET'])
+def morning():
     # 첫 요청 시 정류장 이름을 미리 불러옴
     load_station_names()
 
@@ -140,9 +140,9 @@ def bus_info():
     bus_locations = get_bus_location()  # 북구3 버스 위치 정보 가져오기
 
     if all_buses:
-        return render_template('bus_info.html', buses=all_buses, bus_locations=bus_locations)
+        return render_template('morning.html', buses=all_buses, bus_locations=bus_locations)
     else:
-        return render_template('bus_info.html', message="필터링된 버스 정보가 없습니다.")
+        return render_template('morning.html', message="필터링된 버스 정보가 없습니다.")
 
 if __name__ == '__main__':
     app.run(debug=True)
