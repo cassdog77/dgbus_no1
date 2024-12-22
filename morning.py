@@ -7,8 +7,8 @@ app = Flask(__name__)
 # 정류장 ID와 이름 매핑
 stop_info = {
     "7061038700": "메트로팔레스1",
-    "7011004900": "수성도서관건너",
     "7011006800": "동대구역건너",
+    "7011005000": "수성도서관건너",
     "7011006700": "동대구역"
 }
 
@@ -28,10 +28,36 @@ headers = {
 
 FILTER_TIME = 30
 
+# 전역 변수로 정류장 ID-이름 매핑을 위한 딕셔너리
+station_name_map = {}
+
+# 정류장 정보를 API에서 한 번만 받아오는 함수
+def load_station_names():
+    global station_name_map
+    route_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/bs/route?routeId=4060003000"
+    response = requests.get(route_url, headers=headers)
+    
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            for body in data.get('body', []):
+                bs_id = body.get("bsId")
+                bs_name = body.get("bsNm")
+                station_name_map[bs_id] = bs_name
+        except ValueError as e:
+            print(f"JSON 파싱 오류: {e}")
+    else:
+        print(f"API 응답 오류: {response.status_code}")
+
+# 특정 정류장 ID로 이름을 가져오는 함수 (딕셔너리에서 찾기)
+def get_station_name(bs_id):
+    return station_name_map.get(bs_id, "알 수 없음")
+
 # 버스 도착 정보 가져오기
 def get_bus_data(stop_id):
     url = api_url_template.format(stop_id)
     response = requests.get(url, headers=headers)
+
     if response.status_code == 200:
         try:
             data = response.json()
@@ -77,6 +103,7 @@ def filter_buses(buses, stop_name):
 def get_bus_location():
     bus_location_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/pos/4060003000?routeTCd=&_=1734787744961"
     response = requests.get(bus_location_url, headers=headers)
+
     if response.status_code == 200:
         try:
             data = response.json()
@@ -86,14 +113,12 @@ def get_bus_location():
         
         bus_locations = []
         for bus in data.get('body', []):
-            if bus.get('moveDir') == 1: 
-                # 정류장 이름 가져오기
-                bs_id = bus.get("bsId")
-                bs_name = get_station_name(bs_id)  # 정류장 이름 가져오는 함수 호출
+            if bus.get("moveDir") == "0":
+
                 bus_location = {
                     "vehicleNo": bus.get("vhcNo"),
-                    "seq": bus.get("seq"),
-                    "stationName": bs_name  # 이름으로 표기
+                    "bsGap": 31 - bus.get("seq"),
+                    "stationName": get_station_name(bus.get("bsId"))   # 이름으로 표기
                 }
                 bus_locations.append(bus_location)
         return bus_locations
@@ -101,22 +126,11 @@ def get_bus_location():
         print(f"API 응답 오류: {response.status_code}")
         return []
 
-# 정류장 ID로 이름을 얻는 함수
-def get_station_name(bs_id):
-    route_url = f"https://businfo.daegu.go.kr:8095/dbms_web_api/bs/route?routeId=4060003000"
-    response = requests.get(route_url, headers=headers)
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            for body in data.get('body', []):
-                if body.get("bsId") == bs_id:
-                    return body.get("bsNm")  # 정류장 이름 반환
-        except ValueError as e:
-            print(f"JSON 파싱 오류: {e}")
-    return "알 수 없음"
-
 @app.route('/bus_info', methods=['GET'])
 def bus_info():
+    # 첫 요청 시 정류장 이름을 미리 불러옴
+    load_station_names()
+
     all_buses = []
     for stop_id, stop_name in stop_info.items():
         buses = get_bus_data(stop_id)
