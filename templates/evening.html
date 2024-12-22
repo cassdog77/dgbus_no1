@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신철화 출근버스</title>
+    <title>신철화 퇴근버스</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +32,7 @@
     </style>
 </head>
 <body>
-    <h1>출근</h1>
+    <h1>퇴근</h1>
     {% if buses %}
     <table>
         <thead>
@@ -60,14 +60,14 @@
     <p>{{ message }}</p>
     {% endif %}
     
-    <h2>북구3</h2>
+    <h2>425</h2>
     {% if bus_locations %}
     <table>
         <thead>
             <tr>
                 <th>차량번호</th>
                 <th>정류소</th>
-                <th>동대구역 까지</th>
+                <th>신천LH 까지</th>
             </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@
         </tbody>
     </table>
     {% else %}
-    <p>북구3 버스 위치 정보를 가져올 수 없습니다.</p>
+    <p>버스 위치 정보를 가져올 수 없습니다.</p>
     {% endif %}
 </body>
 </html>

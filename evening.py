@@ -4,19 +4,19 @@ import requests
 import time
 
 # 정류장 ID와 이름 매핑 (저녁용으로 수정 가능)
-stop_info = {
-    "7061038700": "메트로팔레스1",
-    "7011006800": "동대구역건너",
-    "7011005000": "수성도서관건너",
-    "7011006700": "동대구역"
+stop_info = { #https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/7021013700?_=1734858175998
+    "7021030400": "고성아파트건너",
+    "7021013700": "kt북대구건너",
+    "7021013400": "북구청건너",
+    "7011002100": "신천LH건너"
 }
 
 # 각 정류장에서 필터링할 버스 번호 설정 (저녁용으로 수정 가능)
 bus_filters = {
-    "메트로팔레스1": ["425", "937"],
-    "수성도서관건너": ["708"],
-    "동대구역건너": ["북구3"],
-    "동대구역": ["708"]
+    "고성아파트건너": ["북구3"],
+    "kt북대구건너": ["234"],
+    "북구청건너": ["708"],
+    "신천LH건너": ["708"]
 }
 
 api_url_template = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/{}?_=" + str(int(time.time() * 1000))
@@ -33,7 +33,7 @@ station_name_map = {}
 # 정류장 정보를 API에서 한 번만 받아오는 함수
 def load_station_names():
     global station_name_map
-    route_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/bs/route?routeId=4060003000"
+    route_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/bs/route?routeId=3000425000"
     response = requests.get(route_url, headers=headers)
     
     if response.status_code == 200:
@@ -56,10 +56,10 @@ def get_station_name(bs_id):
 def get_bus_data(stop_id):
     url = api_url_template.format(stop_id)
     response = requests.get(url, headers=headers)
-
     if response.status_code == 200:
         try:
             data = response.json()
+            #print(data)
         except ValueError as e:
             print(f"JSON 파싱 오류: {e}")
             return []
@@ -98,9 +98,9 @@ def filter_buses(buses, stop_name):
                 filtered_buses.append(bus)
     return filtered_buses
 
-# 북구3 버스 위치 정보 가져오기
+# 425 버스 위치 정보 가져오기
 def get_bus_location():
-    bus_location_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/pos/4060003000?routeTCd=&_=1734787744961"
+    bus_location_url = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/pos/3000425000?routeTCd=&_=" + str(int(time.time() * 1000))
     response = requests.get(bus_location_url, headers=headers)
 
     if response.status_code == 200:
@@ -116,7 +116,7 @@ def get_bus_location():
 
                 bus_location = {
                     "vehicleNo": bus.get("vhcNo"),
-                    "bsGap": 31 - bus.get("seq"),
+                    "bsGap": 48 - bus.get("seq"),
                     "stationName": get_station_name(bus.get("bsId"))   # 이름으로 표기
                 }
                 bus_locations.append(bus_location)
