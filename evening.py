@@ -118,7 +118,7 @@ def get_bus_location():
 
                 bus_location = {
                     "vehicleNo": bus.get("vhcNo"),
-                    "bsGap": 48 - bus.get("seq"),
+                    "bsGap": 49 - bus.get("seq"),
                     "stationName": get_station_name(bus.get("bsId"))   # 이름으로 표기
                 }
                 bus_locations.append(bus_location)
