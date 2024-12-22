@@ -8,6 +8,7 @@ stop_info = { #https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/702101
     "7021030400": "고성아파트건너",
     "7021013700": "kt북대구건너",
     "7021013400": "북구청건너",
+    "7021012500": "고성지구대",
     "7011002100": "신천LH건너"
 }
 
@@ -16,7 +17,8 @@ bus_filters = {
     "고성아파트건너": ["북구3"],
     "kt북대구건너": ["234"],
     "북구청건너": ["708"],
-    "신천LH건너": ["708"]
+    "고성지구대": ["708"],
+    "신천LH건너": ["425"]
 }
 
 api_url_template = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/{}?_=" + str(int(time.time() * 1000))
