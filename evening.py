@@ -123,7 +123,7 @@ def get_bus_location():
                 }
                 if bus_location["bsGap"] > 0:
                     bus_locations.append(bus_location)
-        return bus_locations
+        return sorted(bus_locations, key=lambda x: x['bsGap'], reverse=True)
     else:
         print(f"API 응답 오류: {response.status_code}")
         return []
