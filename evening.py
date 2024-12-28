@@ -121,7 +121,8 @@ def get_bus_location():
                     "bsGap": 49 - bus.get("seq"),
                     "stationName": get_station_name(bus.get("bsId"))   # 이름으로 표기
                 }
-                bus_locations.append(bus_location)
+                if bus_location["bsGap"] > 0:
+                    bus_locations.append(bus_location)
         return bus_locations
     else:
         print(f"API 응답 오류: {response.status_code}")
