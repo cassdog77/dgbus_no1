@@ -65,17 +65,17 @@
     <table>
         <thead>
             <tr>
-                <th>차량번호</th>
-                <th>정류소</th>
+                <!-- <th>차량번호</th> -->
                 <th>동대구역 까지</th>
+                <th>정류소</th>
             </tr>
         </thead>
         <tbody>
             {% for location in bus_locations %}
             <tr>
                 <!-- <td>{{ location['vehicleNo'] }}</td> -->
-                <td>{{ location['stationName'] }}</td> 
                 <td>{{ location['bsGap'] }}개</td>
+                <td>{{ location['stationName'] }}</td> 
             </tr>
             {% endfor %}
         </tbody>

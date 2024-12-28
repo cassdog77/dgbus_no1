@@ -113,7 +113,7 @@ def get_bus_location():
             if bus.get("moveDir") == "0":
 
                 bus_location = {
-                    #"vehicleNo": bus.get("vhcNo"),
+                    "vehicleNo": bus.get("vhcNo"),
                     "bsGap": 31 - bus.get("seq"),
                     "stationName": get_station_name(bus.get("bsId"))   # 이름으로 표기
                 }
