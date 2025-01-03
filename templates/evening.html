@@ -51,7 +51,9 @@
                 <td>{{ bus['routeNo'] }}</td>
                 <td>{{ bus['arrState'] }}</td>
                 <td>{{ bus['bsNm'] }}</td>
-                <td>{{ bus['bsGap'] }}개</td>
+                <td style="background-color: {% if bus['bsGap'] < 5 %}#ff9999{% endif %};">
+                    {{ bus['bsGap'] }}개
+                </td>
             </tr>
             {% endfor %}
         </tbody>

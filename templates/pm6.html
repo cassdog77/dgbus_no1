@@ -32,7 +32,7 @@
     </style>
 </head>
 <body>
-    <h1>출근</h1>
+    <h1>퇴근</h1>
     {% if buses %}
     <table>
         <thead>
@@ -62,28 +62,5 @@
     <p>{{ message }}</p>
     {% endif %}
     
-    <h2>북구3(동대구역)</h2>
-    {% if bus_locations %}
-    <table>
-        <thead>
-            <tr>
-                <!-- <th>차량번호</th> -->
-                <th>동대구역 까지</th>
-                <th>정류소</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for location in bus_locations %}
-            <tr>
-                <!-- <td>{{ location['vehicleNo'] }}</td> -->
-                <td>{{ location['bsGap'] }}개</td>
-                <td>{{ location['stationName'] }}</td> 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>북구3 버스 위치 정보를 가져올 수 없습니다.</p>
-    {% endif %}
 </body>
 </html>
