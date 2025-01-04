@@ -56,13 +56,15 @@
 
     <h1>
         {% if item == 'am' %}
-            출근버스
+            출근
         {% elif item == 'pm' %}
-            퇴근버스
+            퇴근
         {% else %}
-            버스 정보
+            버스정보
         {% endif %}
+        <span id="current-time"></span>
     </h1>
+
     {% if buses %}
     <table>
         <thead>
@@ -70,7 +72,6 @@
                 <th>정류장</th>
                 <th>버스</th>
                 <th>도착</th>
-                <th>정거장</th>
                 <th>현재</th>
             </tr>
         </thead>
@@ -85,8 +86,7 @@
                     {% endif %};">
                     {{ bus['arrState'] }}
                 </td>
-                <td>{{ bus['bsGap'] }}</td>
-                <td>{{ bus['bsNm'] }}</td>
+                <td>{{ bus['bsNm'] }}-{{ bus['bsGap'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -94,6 +94,24 @@
     {% else %}
     <p>{{ message }}</p>
     {% endif %}
-    
+ <p>서문시장 - (칠곡방향) 7시 24, 30, 35, 40, 45분</p>
+ <p>북구청 - (용지방향) 18시 3, 8, 13, 23, 28, 33, 39, 46, 53분</p>
+<script>
+    // JavaScript로 현재 시간 표시
+    function updateTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const currentTime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('current-time').textContent = currentTime;
+    }
+
+    // 페이지 로드 시 시간 표시 시작
+    updateTime();
+    // 1초마다 시간 갱신
+    setInterval(updateTime, 1000);
+</script>
+
 </body>
 </html>
