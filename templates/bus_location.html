@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버스 위치</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+    <!-- 구글 지도 API 포함 -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+</head>
+<body>
+    <h1>버스 위치</h1>
+
+    <!-- 지도 표시 -->
+    <div id="map"></div>
+
+    <script>
+        var map;
+        var busLocations = [
+            {% for location in bus_locations %}
+            { lat: {{ location['ngisYPos'] }}, lng: {{ location['ngisXPos'] }} , name: "{{ location['stationName'] }}" },
+            {% endfor %}
+        ];
+
+        function initMap() {
+            // 기본 지도 설정 (예: 대구 중심)
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 35.8702, lng: 128.5912},  // 대구 좌표
+                zoom: 13
+            });
+
+            // 버스 위치 마커 추가
+            busLocations.forEach(function(location) {
+                var marker = new google.maps.Marker({
+                    position: {lat: location.lat, lng: location.lng},
+                    map: map,
+                    title: location.name
+                });
+
+                // 마커 클릭 시 정류장 이름을 보여주기
+                var infoWindow = new google.maps.InfoWindow({
+                    content: location.name
+                });
+
+                marker.addListener('click', function() {
+                    infoWindow.open(map, marker);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
