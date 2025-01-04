@@ -5,20 +5,17 @@ import time
 bus_stops = {
     "7061038700": {
         "name": "메트로팔레스1",
-        "filters": ["425","937"]
+        "filters": ["425"]
     },
-    "7011005000": {
-        "name": "수성도서관건너",
+    "7011006700": {
+        "name": "동대구역",
         "filters": ["708"]
     },
-    "7011006800": {
-        "name": "동대구역건너",
+    "7011003900": {
+        "name": "동대구동화아이위시아파트앞",
         "filters": ["북구3"]
     }
-    # "7011006700": {
-    #     "name": "동대구역",
-    #     "filters": ["708"]
-    # },
+
 }
 
 api_url_template = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/arr/{}?_=" + str(int(time.time() * 1000))
@@ -52,7 +49,7 @@ def get_bus_data(stop_id):
                 "bsGap": bus.get("bsGap")
             }
             buses.append(bus_info)
-            print(bus_info)
+            #print(bus_info)
         return buses
     else:
         print(f"API 응답 오류: {response.status_code}")
@@ -63,16 +60,6 @@ def filter_buses(buses, stop_name, filters):
     filtered_buses = []
     for bus in buses:
         if bus["routeNo"] in filters:
-            arr_state = bus["arrState"]
-            if arr_state == "전":  
-                arr_state_minutes = 1
-            elif arr_state == "전전": 
-                arr_state_minutes = 3
-            else:
-                try:
-                    arr_state_minutes = int(arr_state.replace("분", ""))
-                except ValueError:
-                    continue
             bus["stopName"] = stop_name
             filtered_buses.append(bus)
     return filtered_buses

@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>신철화 출근버스</title>
+    <title>버스정류장</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+        }
+        .link-container {
+            margin-bottom: 20px;
+        }
+        .link-container a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px 20px;
+            background-color: #6c757d; /* 차분한 회색 */
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .link-container a:hover {
+            background-color: #495057; /* 어두운 회색 */
         }
         table {
             width: 100%;
@@ -32,7 +48,21 @@
     </style>
 </head>
 <body>
-    <h1>버스</h1>
+    <!-- 출근, 퇴근 링크 -->
+    <div class="link-container">
+        <a href="/bus?item=am">출근</a>
+        <a href="/bus?item=pm">퇴근</a>
+    </div>
+
+    <h1>
+        {% if item == 'am' %}
+            출근버스
+        {% elif item == 'pm' %}
+            퇴근버스
+        {% else %}
+            버스 정보
+        {% endif %}
+    </h1>
     {% if buses %}
     <table>
         <thead>
@@ -42,7 +72,6 @@
                 <th>도착</th>
                 <th>정거장</th>
                 <th>현재</th>
-                
             </tr>
         </thead>
         <tbody>
@@ -50,10 +79,13 @@
             <tr>
                 <td>{{ bus['stopName'] }}</td>
                 <td>{{ bus['routeNo'] }}</td>
-                <td>{{ bus['arrState'] }}</td>
-                <td style="background-color: {% if bus['bsGap'] < 6 %}#ff9999{% endif %};">
-                    {{ bus['bsGap'] }}개
+                <td style="background-color: 
+                    {% if bus['arrState'] == '전' %}#ff9999
+                    {% elif bus['arrState'] == '전전' %}#ffcccc
+                    {% endif %};">
+                    {{ bus['arrState'] }}
                 </td>
+                <td>{{ bus['bsGap'] }}</td>
                 <td>{{ bus['bsNm'] }}</td>
             </tr>
             {% endfor %}

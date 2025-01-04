@@ -67,19 +67,8 @@ def filter_buses(buses, stop_name, filters):
     filtered_buses = []
     for bus in buses:
         if bus["routeNo"] in filters:
-            arr_state = bus["arrState"]
-            if arr_state == "전":  
-                arr_state_minutes = 1
-            elif arr_state == "전전": 
-                arr_state_minutes = 3
-            else:
-                try:
-                    arr_state_minutes = int(arr_state.replace("분", ""))
-                except ValueError:
-                    continue
-            if arr_state_minutes <= FILTER_TIME:
-                bus["stopName"] = stop_name
-                filtered_buses.append(bus)
+            bus["stopName"] = stop_name
+            filtered_buses.append(bus)
     return filtered_buses
 
 
