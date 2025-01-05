@@ -45,6 +45,7 @@ bus_stops_pm = {
 
 bus_id = {
     "북구3": "4060003000",
+    "425": "3000425000",
 }
 
 station_name_map = {}
@@ -93,32 +94,39 @@ def process_bus_data(bus_stops):
 
 
 # 버스번호 -> 위치 정보 가져오기
-def get_bus_location(bus):
-    # API URL 
+def get_bus_location(bus,dir):
+    # 정류장
     url = "https://businfo.daegu.go.kr:8095/dbms_web_api/bs/route?routeId={}".format(bus_id[bus])
     response = requests.get(url, headers=headers)
     data = response.json()
-    for body in data.get('body', []):
-        bs_id = body.get("bsId")
-        bs_name = body.get("bsNm")
+    bus_stops = []
+    for i in data.get('body', []):
+        bs_id = i.get("bsId")
+        bs_name = i.get("bsNm")
         station_name_map[bs_id] = bs_name
-
-    url = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/pos/{}".format(bus_id[bus])
+        bus_stop = {
+            "lat": i.get("lat"),
+            "lng": i.get("lng"),
+            "stationName": bs_name
+        }
+        bus_stops.append(bus_stop)
+    
+    # 버스위치
+    url = "https://businfo.daegu.go.kr:8095/dbms_web_api/bs/position?routeId={}".format(bus_id[bus])
     #print(url)
     response = requests.get(url, headers=headers)
     data = response.json()
     bus_locations = []
-    for bus in data.get('body', []):
-        if bus.get("moveDir") == "0":
-
+    for i in data.get('body', []):
+        if i.get("moveDir") == dir:
             bus_location = {
-                "ngisXPos": bus.get("ngisXPos"),
-                "ngisYPos": bus.get("ngisYPos"),
-                "stationName": station_name_map[bus.get("bsId")]  # 이름으로 표기
+                "moveDir": i.get("moveDir"), 
+                "lat": i.get("lat"),
+                "lng": i.get("lng"),
+                "stationName": station_name_map[i.get("bsId")] 
             }
             bus_locations.append(bus_location)
-    #print(bus_locations)
-    return bus_locations#sorted(bus_locations, key=lambda x: x['bsGap'], reverse=False)
+    return bus_stops, bus_locations
 
 # Flask 라우트
 @app.route('/bus', methods=['GET'])
@@ -129,11 +137,11 @@ def bus_route():
     elif item == 'pm':
         bus_stops = bus_stops_pm
     else:
-        # 'am'이나 'pm'이 아니면 get_bus_location 호출
-        # 예시로 '북구3'이라는 버스를 대상으로 위치 정보를 가져옵니다.
-        bus = '북구3'  # 예시 버스
-        bus_locations = get_bus_location(bus)
-        return render_template('bus_location.html', bus_locations=bus_locations, item=item, api_key=os.getenv('KAKAO_MAPS_API_KEY'))
+        bus = item 
+        dir = request.args.get('dir', '1') 
+        bus_stops, bus_locations = get_bus_location(bus,dir)
+        return render_template('bus_location.html', bus_locations=bus_locations, bus_stops=bus_stops, 
+                               item=item, api_key=os.getenv('KAKAO_MAPS_API_KEY'))
 
     all_buses = process_bus_data(bus_stops)
     return render_template('busstop.html', buses=all_buses, item=item)
