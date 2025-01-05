@@ -25,11 +25,11 @@
     <div id="map" style="width:100%;height:350px;"></div>
 
     <script>
-        // var busLocations = [
-        //     {% for location in bus_locations %}
-        //     { ngisYPos: {{ location['ngisYPos'] }}, ngisXPos: {{ location['ngisXPos'] }} , name: "{{ location['stationName'] }}" },
-        //     {% endfor %}
-        // ];
+        var busLocations = [
+            {% for location in bus_locations %}
+            { ngisYPos: {{ location['ngisYPos'] }}, ngisXPos: {{ location['ngisXPos'] }} , name: "{{ location['stationName'] }}" },
+            {% endfor %}
+        ];
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
         mapOption = { 
