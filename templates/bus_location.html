@@ -15,8 +15,8 @@
             margin-top: 20px;
         }
     </style>
-    <!-- 구글 지도 API 포함 -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+    <!-- 카카오맵 API 포함 -->
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ api_key }}&autoload=false"></script>
 </head>
 <body>
     <h1>버스 위치</h1>
@@ -32,31 +32,35 @@
             {% endfor %}
         ];
 
-        function initMap() {
+        // 카카오맵 초기화
+        kakao.maps.load(function() {
             // 기본 지도 설정 (예: 대구 중심)
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 35.8702, lng: 128.5912},  // 대구 좌표
-                zoom: 13
+            map = new kakao.maps.Map(document.getElementById('map'), {
+                center: new kakao.maps.LatLng(35.8702, 128.5912),  // 대구 좌표
+                level: 3  // 줌 레벨
             });
 
             // 버스 위치 마커 추가
             busLocations.forEach(function(location) {
-                var marker = new google.maps.Marker({
-                    position: {lat: location.lat, lng: location.lng},
-                    map: map,
-                    title: location.name
+                var markerPosition = new kakao.maps.LatLng(location.lat, location.lng);
+
+                // 마커 객체 생성
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition,
+                    map: map
                 });
 
-                // 마커 클릭 시 정류장 이름을 보여주기
-                var infoWindow = new google.maps.InfoWindow({
+                // 마커 클릭 시 정류장 이름을 보여주는 인포윈도우
+                var infowindow = new kakao.maps.InfoWindow({
                     content: location.name
                 });
 
-                marker.addListener('click', function() {
-                    infoWindow.open(map, marker);
+                // 마커 클릭 이벤트
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
                 });
             });
-        }
+        });
     </script>
 </body>
 </html>

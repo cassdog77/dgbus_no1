@@ -133,7 +133,7 @@ def bus_route():
         # 예시로 '북구3'이라는 버스를 대상으로 위치 정보를 가져옵니다.
         bus = '북구3'  # 예시 버스
         bus_locations = get_bus_location(bus)
-        return render_template('bus_location.html', bus_locations=bus_locations, api_key=GOOGLE_MAPS_API_KEY)
+        return render_template('bus_location.html', bus_locations=bus_locations, item=item, api_key=GOOGLE_MAPS_API_KEY)
 
     all_buses = process_bus_data(bus_stops)
     return render_template('busstop.html', buses=all_buses, item=item)
