@@ -104,7 +104,7 @@ def get_bus_location(bus):
         station_name_map[bs_id] = bs_name
 
     url = "https://businfo.daegu.go.kr:8095/dbms_web_api/realtime/pos/{}".format(bus_id[bus])
-    print(url)
+    #print(url)
     response = requests.get(url, headers=headers)
     data = response.json()
     bus_locations = []
@@ -117,7 +117,7 @@ def get_bus_location(bus):
                 "stationName": station_name_map[bus.get("bsId")]  # 이름으로 표기
             }
             bus_locations.append(bus_location)
-    print(bus_locations)
+    #print(bus_locations)
     return bus_locations#sorted(bus_locations, key=lambda x: x['bsGap'], reverse=False)
 
 # Flask 라우트
@@ -133,7 +133,7 @@ def bus_route():
         # 예시로 '북구3'이라는 버스를 대상으로 위치 정보를 가져옵니다.
         bus = '북구3'  # 예시 버스
         bus_locations = get_bus_location(bus)
-        return render_template('bus_location.html', bus_locations=bus_locations, item=item, api_key=os.getenv('KAKAO_MAP_API_KEY'))
+        return render_template('bus_location.html', bus_locations=bus_locations, item=item, api_key=os.getenv('KAKAO_MAPS_API_KEY'))
 
     all_buses = process_bus_data(bus_stops)
     return render_template('busstop.html', buses=all_buses, item=item)
