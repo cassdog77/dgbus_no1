@@ -12,18 +12,37 @@
         .link-container {
             margin-bottom: 20px;
         }
+        /* 공통 링크 스타일 */
         .link-container a {
             display: inline-block;
-            margin-right: 15px;
-            padding: 10px 20px;
-            background-color: #6c757d; /* 차분한 회색 */
-            color: white;
+            padding: 8px 16px;
             text-decoration: none;
+            color: white;
             border-radius: 4px;
+            margin-right: 10px;
             transition: background-color 0.3s;
+            font-size: 12px; /* 버튼 텍스트 크기를 작게 조정 */
         }
-        .link-container a:hover {
+        /* 출근, 퇴근 버튼 스타일 */
+        .link-container .commute-btn {
+            background-color: #6c757d; /* 차분한 회색 */
+        }
+        .link-container .commute-btn:hover {
             background-color: #495057; /* 어두운 회색 */
+        }
+        /* 버스 번호 버튼 스타일 */
+        .link-container .bus-btn_am {
+            background-color: #007bff; /* 파란색 */
+        }
+        .link-container .bus-btn_am:hover {
+            background-color: #0056b3; /* 어두운 파란색 */
+        }
+        /* 버스 번호 버튼 스타일 */
+        .link-container .bus-btn_pm {
+            background-color: #dd9b31; /* 파란색 */
+        }
+        .link-container .bus-btn_pm:hover {
+            background-color: #db9421; /* 어두운 파란색 */
         }
         table {
             width: 100%;
@@ -50,10 +69,16 @@
 <body>
     <!-- 출근, 퇴근 링크 -->
     <div class="link-container">
-        <a href="/bus?item=am">출근</a>
-        <a href="/bus?item=북구3&dir=0">북구3</a>
-        <a href="/bus?item=425">425</a>
-        <a href="/bus?item=pm">퇴근</a>
+        <a href="/bus?item=am" class="commute-btn">출근</a>
+        <a href="/bus?item=pm" class="commute-btn">퇴근</a>
+        
+        <a href="/bus?item=425" class="bus-btn_am">425</a>
+        <a href="/bus?item=북구3&dir=0" class="bus-btn_am">북구3</a>
+        <a href="/bus?item=101" class="bus-btn_am">101</a>
+
+        <a href="/bus?item=708" class="bus-btn_pm">708</a>
+        <a href="/bus?item=북구3" class="bus-btn_pm">북구3</a>
+        <a href="/bus?item=234&dir=0" class="bus-btn_pm">234</a>
     </div>
 
     <h1>
@@ -75,6 +100,7 @@
                 <th>버스</th>
                 <th>도착</th>
                 <th>현재</th>
+                <th>.</th>
             </tr>
         </thead>
         <tbody>
@@ -88,7 +114,8 @@
                     {% endif %};">
                     {{ bus['arrState'] }}
                 </td>
-                <td>{{ bus['bsNm'] }}-{{ bus['bsGap'] }}</td>
+                <td>{{ bus['bsNm'] }}</td>
+                <td>{{ bus['bsGap'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -96,8 +123,8 @@
     {% else %}
     <p>{{ message }}</p>
     {% endif %}
- <p>서문시장 - (칠곡방향) 7시 24, 30, 35, 40, 45분</p>
- <p>북구청 - (용지방향) 18시 3, 8, 13, 23, 28, 33, 39, 46, 53분</p>
+    <p>서문시장 - (칠곡방향) 7시 24, 30, 35, 40, 45분</p>
+    <p>북구청 - (용지방향) 18시 3, 8, 13, 23, 28, 33, 39, 46, 53분</p>
 <script>
     // JavaScript로 현재 시간 표시
     function updateTime() {
