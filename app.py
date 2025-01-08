@@ -146,7 +146,7 @@ def bus_route():
         dir = request.args.get('dir', '1')
         bus_stops, bus_locations = get_bus_location(bus, dir)
         return render_template('bus_location.html', bus_locations=bus_locations, bus_stops=bus_stops, 
-                               item=item, api_key=os.getenv('KAKAO_MAPS_API_KEY'))
+                               item=item, api_key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
     all_buses = process_bus_data(bus_stops)
     return render_template('busstop.html', buses=all_buses, item=item)

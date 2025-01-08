@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ item }} 위치</title>
     <style>
-        html,body {
+        html, body {
             font-family: Arial, sans-serif;
-            margin: 0px;
+            margin: 0;
             height: 100%;
             width: 100%;
         }
@@ -29,99 +29,68 @@
         #map {
             height: 100%;
             width: 100%;
-            #margin-top: 20px;
+            margin-top: 20px;
         }
     </style>
-    <!-- 카카오맵 API 포함 -->
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ api_key }}&libraries=services"></script>
+    <!-- Google 지도 API 포함 (Google API 키 필요) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}"></script>
 </head>
 <body>
-    <h1>{{ item }}  위치</h1>
+    <h1>{{ item }} 위치</h1>
     
-    <!-- 지도를 표시할 div 입니다 -->
+    <!-- 지도를 표시할 div -->
     <div id="map"></div>
     
-    <!-- <table>
-        <thead>
-            <tr>
-                <th>정방향 정거장</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            {% for location in bus_locations %}
-                {% if location['moveDir'] == '0' %}
-                <tr>
-                    <td>{{ location['stationName'] }}</td>
-                </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>역방향 정거장</th>
-            </tr>
-        </thead>
-        <tbody>
- 
-            {% for location in bus_locations %}
-                {% if location['moveDir'] == '1' %}
-                <tr>
-                    <td>{{ location['stationName'] }}</td>
-                </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table> -->
-
     <script>
-        // 카카오지도
-        var mapContainer = document.getElementById('map'); 
-        var mapOption = {
-            center: new kakao.maps.LatLng(35.8738, 128.6134),  
-            level: 2
-        };
-        var map = new kakao.maps.Map(mapContainer, mapOption);
+        // Google 지도 생성
+        function initMap() {
+            // 지도의 초기 위치 설정 (예: 대구 중심 좌표)
+            var centerPosition = { lat: 35.8738, lng: 128.6134 };
 
-        // 마커 
-        var positions = [
-            {% for position in bus_stops %}
-            { title: "{{ position['stationName'] }}", latlng: new kakao.maps.LatLng({{ position['lat'] }}, {{ position['lng'] }})},
-            {% endfor %}
-        ];
-        var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-        for (var i = 0; i < positions.length; i ++) {
-            var imageSize = new kakao.maps.Size(12, 17);   
-            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-            var marker = new kakao.maps.Marker({
-                map: map, 
-                position: positions[i].latlng, 
-                title : positions[i].title, 
-                image : markerImage 
+            // 지도 객체 생성
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: centerPosition,
+                zoom: 13
+            });
+
+            // 버스 정류장 위치에 마커 표시
+            var busStops = [
+                {% for stop in bus_stops %}
+                { title: "{{ stop['stationName'] }}", position: { lat: {{ stop['lat'] }}, lng: {{ stop['lng'] }} } },
+                {% endfor %}
+            ];
+
+            busStops.forEach(function(stop) {
+                var marker = new google.maps.Marker({
+                    position: stop.position,
+                    map: map,
+                    title: stop.title,
+                    icon: {
+                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",  // 아이콘 이미지 설정
+                        scaledSize: new google.maps.Size(30, 30)  // 아이콘 크기 설정
+                    }
+                });
+            });
+
+            // 버스 위치에 인포윈도우 표시
+            var busLocations = [
+                {% for location in bus_locations %}
+                { title: "{{ location['stationName'] }}", dir: "{{ location['moveDir'] }}", 
+                  position: { lat: {{ location['lat'] }}, lng: {{ location['lng'] }} } },
+                {% endfor %}
+            ];
+
+            busLocations.forEach(function(location) {
+                var infowindow = new google.maps.InfoWindow({
+                    content: '<div style="background-color:' + (location.dir == '0' ? '#ff1010' : '#aaaaaa') + '; color: white; padding: 5px; border-radius: 5px;">' + location.title + '</div>',
+                    position: location.position
+                });
+                infowindow.open(map);  // 지도에 인포윈도우 표시
             });
         }
 
-        // 인포윈도우
-        var positions = [
-            {% for position in bus_locations %}
-            { title: "{{ position['stationName'] }}", dir: "{{ position['moveDir'] }}", 
-              latlng: new kakao.maps.LatLng({{ position['lat'] }}, {{ position['lng'] }})},
-            {% endfor %}
-        ];
-        for (var i = 0; i < positions.length; i ++) {
-            var color = (positions[i].dir == '0') ? '#ff1010' : '#aaaaaa';  // '0'은 파란색, '1'은 빨간색
-            var infowindow = new kakao.maps.InfoWindow({
-                map: map, 
-                position: positions[i].latlng, 
-                content: '<div style="padding:5px; background-color:' + color + '; color: white; border-radius: 5px;">'+positions[i].title+'</div>',
-                removable: false
-            });
-        }
-
-
+        // Google 지도 초기화
+        google.maps.event.addDomListener(window, 'load', initMap);
     </script>
 </body>
 </html>
