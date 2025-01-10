@@ -69,23 +69,27 @@
 <body>
     <!-- 출근, 퇴근 링크 -->
     <div class="link-container">
-        <a href="/bus?item=am" class="commute-btn">출근</a>
-        <a href="/bus?item=pm" class="commute-btn">퇴근</a>
-        
-        <a href="/bus?item=425" class="bus-btn_am">425</a>
-        <a href="/bus?item=북구3&dir=0" class="bus-btn_am">북구3</a>
-        <a href="/bus?item=101" class="bus-btn_am">101</a>
-
-        <a href="/bus?item=708" class="bus-btn_pm">708</a>
-        <a href="/bus?item=북구3" class="bus-btn_pm">북구3</a>
-        <a href="/bus?item=234&dir=0" class="bus-btn_pm">234</a>
+        <a href="/bus?item=am"  class="commute-btn">출근</a>
+        <a href="/bus?item=amc" class="commute-btn">출근(환)</a>
+        <a href="/bus?item=pm"  class="commute-btn">퇴근</a>
+        <a href="/bus?item=pmc" class="commute-btn">퇴근(환)</a>
+        <!-- <a href="/bus?item=425" class="bus-btn_am">425</a>
+        <a href="/bus?item=북구3&dir=0" class="bus-btn_am">북구3</a> -->
+        <!-- <a href="/bus?item=101" class="bus-btn_am">101</a>
+        <a href="/bus?item=708" class="bus-btn_pm">708</a> -->
+        <!-- <a href="/bus?item=북구3" class="bus-btn_pm">북구3</a>
+        <a href="/bus?item=234&dir=0" class="bus-btn_pm">234</a> -->
     </div>
 
     <h1>
         {% if item == 'am' %}
             출근
+        {% if item == 'amc' %}
+            출근(환)
         {% elif item == 'pm' %}
             퇴근
+        {% elif item == 'pmc' %}
+            퇴근(환)
         {% else %}
             버스정보
         {% endif %}

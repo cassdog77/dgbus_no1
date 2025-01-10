@@ -9,7 +9,25 @@ bus_stops_am = {
     "7061038700": {
         "name": "메트로팔레스1",
         "filters": ["425","937"]
+    }
+}
+
+bus_stops_pm = {
+    "7021013700": {
+        "name": "kt북대구건너",
+        "filters": ["234"]
+    },      
+    "7021030400": {
+        "name": "고성아파트건너",
+        "filters": ["북구3"]
     },
+    "7021012500": {
+        "name": "고성지구대",
+        "filters": ["708"]
+    }
+}
+
+bus_stops_amc = {
     "7011002200": {
         "name": "신천LH",
         "filters": ["북구3","101"]
@@ -24,24 +42,17 @@ bus_stops_am = {
     } 
 }
 
-bus_stops_pm = {
-    "7021012500": {
-        "name": "고성지구대",
-        "filters": ["708"]
+bus_stops_pmc = {
+    "7011002400": {
+        "name": "역전시장앞",
+        "filters": ["425","651","909"]
     },
-    "7021013700": {
-        "name": "kt북대구건너",
-        "filters": ["234"]
-    },      
-    "7021030400": {
-        "name": "고성아파트건너",
-        "filters": ["북구3"]
-    },
-    "7011002100": {
-        "name": "신천LH건너",
-        "filters": ["425"]
-    }
+    "7001006800": {
+        "name": "228중앙공원",
+        "filters": ["425","651","518"]
+    } 
 }
+
 # https://apis.map.kakao.com/web/sample/addMapClickEventWithMarker/
 bus_id = {
     "북구3": ["4060003000"],
@@ -139,8 +150,13 @@ def bus_route():
     item = request.args.get('item', 'am')
     if item == 'am':
         bus_stops = bus_stops_am
+    elif item == 'amc':
+        bus_stops = bus_stops_amc
     elif item == 'pm':
         bus_stops = bus_stops_pm
+    elif item == 'pmc':
+        bus_stops = bus_stops_pmc
+
     else:
         bus = item
         dir = request.args.get('dir', '1')
