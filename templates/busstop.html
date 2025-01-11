@@ -73,12 +73,6 @@
         <a href="/bus?item=amc" class="commute-btn">출근(환)</a>
         <a href="/bus?item=pm"  class="commute-btn">퇴근</a>
         <a href="/bus?item=pmc" class="commute-btn">퇴근(환)</a>
-        <!-- <a href="/bus?item=425" class="bus-btn_am">425</a>
-        <a href="/bus?item=북구3&dir=0" class="bus-btn_am">북구3</a> -->
-        <!-- <a href="/bus?item=101" class="bus-btn_am">101</a>
-        <a href="/bus?item=708" class="bus-btn_pm">708</a> -->
-        <!-- <a href="/bus?item=북구3" class="bus-btn_pm">북구3</a>
-        <a href="/bus?item=234&dir=0" class="bus-btn_pm">234</a> -->
     </div>
 
     <h1>
@@ -127,8 +121,23 @@
     {% else %}
     <p>{{ message }}</p>
     {% endif %}
-    <p>서문시장 - (칠곡방향) 7시 24, 30, 35, 40, 45분</p>
-    <p>북구청 - (용지방향) 18시 3, 8, 13, 23, 28, 33, 39, 46, 53분</p>
+
+    {% if item == 'amc' %}
+        <p>서문시장 - (칠곡방향) 7시 24, 30, 35, 40, 45분</p>
+        <div class="link-container">
+            <a href="/bus?item=425" class="bus-btn_am">425</a>
+            <a href="/bus?item=북구3&dir=0" class="bus-btn_am">북구3</a>
+            <a href="/bus?item=101" class="bus-btn_am">101</a>
+        </div>
+    {% elif item == 'pmc' %}
+        <p>북구청 - (용지방향) 18시 3, 8, 13, 23, 28, 33, 39, 46, 53분</p>
+        <div class="link-container">
+            <a href="/bus?item=708" class="bus-btn_pm">708</a>
+            <a href="/bus?item=북구3" class="bus-btn_pm">북구3</a>
+            <a href="/bus?item=234&dir=0" class="bus-btn_pm">234</a>
+        </div>
+    {% endif %}
+
 <script>
     // JavaScript로 현재 시간 표시
     function updateTime() {
